@@ -5,10 +5,8 @@ CoreScanner core(5); // Debounce time of keys in ms
 
 uint32_t delay_started;
 
-byte modifiers = 0;
 bool last_state_keys[6];
 bool keystates[6];
-bool soundState = 0;
 
 void setup()
 {
@@ -42,7 +40,7 @@ void user_program()
 
 // Since everything is scanned, we can't just delay, as the LED's would stop on whichever was last scanned.
 // We also need to keep sending messages over USB telling the PC that we are still here.
-void delayPropper(uint16_t delay_ms)
+void delayPropper(uint32_t delay_ms)
 {
   delay_started = millis();
   while(millis()-delay_started < delay_ms)

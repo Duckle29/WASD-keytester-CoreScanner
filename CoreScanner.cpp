@@ -106,12 +106,12 @@ void CoreScanner::_scan_LEDs()
 void CoreScanner::_scan_keys()
 {
   //Key 5
-  _set_pin(_A, 2); _set_pin(_B, 3); _set_pin(_C, 0); _key_states_raw[4] = bit_get(PINB, bit(_B));
-  _set_pin(_A, 2); _set_pin(_B, 0); _set_pin(_C, 3); _key_states_raw[5] = bit_get(PINB, bit(_C));
-  _set_pin(_A, 3); _set_pin(_B, 2); _set_pin(_C, 0); _key_states_raw[2] = bit_get(PINB, bit(_A));
-  _set_pin(_A, 0); _set_pin(_B, 2); _set_pin(_C, 3); _key_states_raw[3] = bit_get(PINB, bit(_C));
-  _set_pin(_A, 3); _set_pin(_B, 0); _set_pin(_C, 2); _key_states_raw[0] = bit_get(PINB, bit(_A));
-  _set_pin(_A, 0); _set_pin(_B, 3); _set_pin(_C, 2); _key_states_raw[1] = bit_get(PINB, bit(_B));
+  _set_pin(_A, 3); _set_pin(_B, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[0] = bit_get(PINB, bit(_A));
+  _set_pin(_B, 3); _set_pin(_A, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[1] = bit_get(PINB, bit(_B));
+  _set_pin(_A, 3); _set_pin(_C, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[2] = bit_get(PINB, bit(_A));
+  _set_pin(_C, 3); _set_pin(_A, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[3] = bit_get(PINB, bit(_C));
+  _set_pin(_B, 3); _set_pin(_C, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[4] = bit_get(PINB, bit(_B));
+  _set_pin(_C, 3); _set_pin(_B, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[5] = bit_get(PINB, bit(_C));
 }
 
 void CoreScanner::_debounce_states()
