@@ -35,9 +35,16 @@ void CoreScanner::setLed(uint8_t pin, bool state)
 }
 
 // Public function to get the state of a key
-bool CoreScanner::getKey(uint8_t key)
+bool CoreScanner::getKey(uint8_t key, bool deghost)
 {
-  return _key_states[key];
+  // Whoa, that's a longer one. Let's break it down:
+  // if two ghosting keys are held down, we get 1 && 1, which evaluates to 1, flip that to 0
+  // if there are two ghosting keys, we would've read a one, but shouldn't have. which would looke like so:
+  // _key_states[i] = 1 && 0; which will evaluate to 0
+  if(deghost)
+    return _key_states[key] && !(_key_states_raw[_ghost_states[key][0]] && _key_states_raw[_ghost_states[key][1]]);
+  else
+    return _key_states[key];
 }
 
 // Public function to keep refreshing things in here
@@ -105,13 +112,12 @@ void CoreScanner::_scan_LEDs()
 // Scans the keys, and puts their states in _key_states_raw for debouncing
 void CoreScanner::_scan_keys()
 {
-  //Key 5
-  _set_pin(_A, 3); _set_pin(_B, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[0] = bit_get(PINB, bit(_A));
-  _set_pin(_B, 3); _set_pin(_A, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[1] = bit_get(PINB, bit(_B));
-  _set_pin(_A, 3); _set_pin(_C, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[2] = bit_get(PINB, bit(_A));
-  _set_pin(_C, 3); _set_pin(_A, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[3] = bit_get(PINB, bit(_C));
-  _set_pin(_B, 3); _set_pin(_C, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[4] = bit_get(PINB, bit(_B));
-  _set_pin(_C, 3); _set_pin(_B, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[5] = bit_get(PINB, bit(_C));
+  _set_pin(_A, 3); _set_pin(_B, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[0] = !bit_get(PINB, bit(_A));
+  _set_pin(_B, 3); _set_pin(_A, 0); _set_pin(_C, 2); delayMicroseconds(8); _key_states_raw[1] = !bit_get(PINB, bit(_B));
+  _set_pin(_A, 3); _set_pin(_C, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[2] = !bit_get(PINB, bit(_A));
+  _set_pin(_C, 3); _set_pin(_A, 0); _set_pin(_B, 2); delayMicroseconds(8); _key_states_raw[3] = !bit_get(PINB, bit(_C));
+  _set_pin(_B, 3); _set_pin(_C, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[4] = !bit_get(PINB, bit(_B));
+  _set_pin(_C, 3); _set_pin(_B, 0); _set_pin(_A, 2); delayMicroseconds(8); _key_states_raw[5] = !bit_get(PINB, bit(_C));
 }
 
 void CoreScanner::_debounce_states()
@@ -119,7 +125,8 @@ void CoreScanner::_debounce_states()
   unsigned long _current_millis = millis();
   for(int i=0; i<_SW_COUNT; i++)
   {
-      if(_key_states_raw[i] != _key_states[i] && _current_millis - _key_last_change[i] > _bounce_delay)
+
+      if(_key_states_raw[i] != _key_states[i] && _current_millis - _key_last_change[i] > _bounce_delay && _deghost_states(i))
       {
           _key_states[i] = _key_states_raw[i];
           _key_last_change[i] = _current_millis;

@@ -32,7 +32,7 @@ class CoreScanner
   public:
     CoreScanner(uint8_t bounce_delay = 5);
     void setLed(uint8_t pin, bool state);
-    bool getKey(uint8_t key);
+    bool getKey(uint8_t key, bool deghost = false);
     void begin();
     void poke();
   private:
@@ -44,6 +44,15 @@ class CoreScanner
     bool _key_states[_SW_COUNT];
     bool _key_states_raw[_SW_COUNT];
     unsigned long _key_last_change[_SW_COUNT];
+    uint8_t _ghost_states[_SW_COUNT][2] =
+    {
+      {2,5},
+      {4,3},
+      {0,4},
+      {5,1},
+      {1,2},
+      {3,0}
+    }
 
   	// Switches functions
   	void _scan_keys();
