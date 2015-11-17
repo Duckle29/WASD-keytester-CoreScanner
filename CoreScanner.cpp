@@ -126,7 +126,7 @@ void CoreScanner::_debounce_states()
   for(int i=0; i<_SW_COUNT; i++)
   {
 
-      if(_key_states_raw[i] != _key_states[i] && _current_millis - _key_last_change[i] > _bounce_delay && _deghost_states(i))
+      if(_key_states_raw[i] != _key_states[i] && _current_millis - _key_last_change[i] > _bounce_delay)
       {
           _key_states[i] = _key_states_raw[i];
           _key_last_change[i] = _current_millis;

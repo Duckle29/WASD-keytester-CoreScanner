@@ -52,12 +52,11 @@ class CoreScanner
       {5,1},
       {1,2},
       {3,0}
-    }
+    };
 
   	// Switches functions
   	void _scan_keys();
   	void _debounce_states();
-  	void _scan_state_changer(uint8_t switch1, uint8_t switch2, uint8_t switch3);
 
   	// LED variables
 		bool _led_states[_LED_COUNT];
