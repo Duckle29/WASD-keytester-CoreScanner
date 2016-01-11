@@ -35,16 +35,9 @@ void CoreScanner::setLed(uint8_t pin, bool state)
 }
 
 // Public function to get the state of a key
-bool CoreScanner::getKey(uint8_t key, bool deghost)
+int CoreScanner::getKey(uint8_t key)
 {
-  // Whoa, that's a longer one. Let's break it down:
-  // if two ghosting keys are held down, we get 1 && 1, which evaluates to 1, flip that to 0
-  // if there are two ghosting keys, we would've read a one, but shouldn't have. which would looke like so:
-  // _key_states[i] = 1 && 0; which will evaluate to 0
-  if(deghost)
-    return _key_states[key] && !(_key_states_raw[_ghost_states[key][0]] && _key_states_raw[_ghost_states[key][1]]);
-  else
-    return _key_states[key];
+  return _key_states[key];
 }
 
 // Public function to keep refreshing things in here

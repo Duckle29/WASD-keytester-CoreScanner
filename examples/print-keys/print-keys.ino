@@ -21,16 +21,18 @@ void loop()
 
 void user_program()
 {
+  DigiKeyboard.sendKeyStroke(0);
   for(int i=0; i<6; i++)
   {
     keystates[i] = core.getKey(i);
   }
-  DigiKeyboard.sendKeyStroke(0);
+
+
   for(int i=0; i<6; i++)
   {
     if(last_state_keys[i] != keystates[i])
     {
-      last_state_keys[i] = keystates[i]; // Make sure this only runs once per switch press
+      last_state_keys[i] = keystates[i]; // Makes sure this only runs once per switch press
       DigiKeyboard.print("Key ");
       DigiKeyboard.print(i);
       DigiKeyboard.sendKeyStroke(KEY_ENTER);
